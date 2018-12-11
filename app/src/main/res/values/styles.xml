@@ -1,0 +1,16 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.TransparentWindow" parent="AppTheme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--设置窗口的背景是否为半透明，设置透明背景必须要设置此项-->
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+</resources>

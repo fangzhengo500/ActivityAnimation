@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">ActivityAnimation</string>
+    <string name="custom_animation">Custom Animation</string>
+    <string name="scale_up_animation">Scale Up Animation</string>
+    <string name="thumbnail_scale_up_animation">Thumbnail Scale Up Animation</string>
+    <string name="scene_transition_animation_1">Scene Transition Animation 1</string>
+    <string name="scene_transition_animation_2">Scene Transition Animation 2</string>
+    <string name="scene_transition_animation_explode">Scene Transition Animation Explode</string>
+
+
+    <string name="iv_cover_transition">iv_cover_transition</string>
+    <string name="tv_title_transition">tv_title_transition</string>
+    <string name="card_transition">card_transition</string>
+    <string name="gallery">Gallery</string>
+</resources>
