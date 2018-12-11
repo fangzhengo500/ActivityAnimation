@@ -1,4 +1,4 @@
-package com.loosu.activityanimation;
+package com.loosu.activityanimation.gallery;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,9 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.SharedElementCallback;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
@@ -23,9 +21,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.hw.ycshareelement.YcShareElement;
-import com.hw.ycshareelement.transition.IShareElements;
-import com.hw.ycshareelement.transition.ShareElementInfo;
+import com.loosu.activityanimation.R;
 import com.loosu.adapter.recyclerview.ARecyclerAdapter;
 import com.loosu.adapter.recyclerview.RecyclerHolder;
 import com.loosu.utils.KLog;
@@ -34,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class YcViewPagerGalleryActivity extends AppCompatActivity implements IShareElements {
+public class ViewPagerGalleryActivity extends AppCompatActivity {
     private static final String TAG = "ViewPagerGalleryActivity";
 
 
@@ -47,7 +43,7 @@ public class YcViewPagerGalleryActivity extends AppCompatActivity implements ISh
         ArrayList<Integer> imgList = new ArrayList<>();
         imgList.addAll(imgs);
 
-        Intent intent = new Intent(context, YcViewPagerGalleryActivity.class);
+        Intent intent = new Intent(context, ViewPagerGalleryActivity.class);
         intent.putExtra(KEY_IMGS, imgList);
         intent.putExtra(KEY_INDEX, index);
         return intent;
@@ -56,7 +52,6 @@ public class YcViewPagerGalleryActivity extends AppCompatActivity implements ISh
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        YcShareElement.setEnterTransitions(this, this, false);
         setContentView(R.layout.activity_viewpager_gallery);
         findView(savedInstanceState);
         initView(savedInstanceState);
@@ -78,26 +73,38 @@ public class YcViewPagerGalleryActivity extends AppCompatActivity implements ISh
     }
 
     private void initListener(final Bundle savedInstanceState) {
+        mViewList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.e(TAG, "onScrollStateChanged:" + newState);
+            }
+        });
+        setEnterSharedElementCallback(new SharedElementCallback() {
+            @Override
+            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                super.onMapSharedElements(names, sharedElements);
+                int position = Integer.valueOf(mLayoutManager.findFirstVisibleItemPosition());
+                View view = mLayoutManager.findViewByPosition(position);
+                sharedElements.put(String.valueOf(position), view);
 
+                KLog.e(TAG, "onMapSharedElements: " + names + ", views: " + sharedElements);
+            }
+        });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra(KEY_INDEX, mLayoutManager.findFirstVisibleItemPosition());
+        setResult(Activity.RESULT_OK, intent);
+        finishAfterTransition();
     }
 
     @Override
     public void finishAfterTransition() {
-        YcShareElement.finishAfterTransition(this, this);
         super.finishAfterTransition();
-    }
-
-    @Override
-    public void onBackPressed() {
-        ActivityCompat.finishAfterTransition(this);
-    }
-
-    @Override
-    public ShareElementInfo[] getShareElements() {
-        int position = mLayoutManager.findFirstVisibleItemPosition();
-        View view = mLayoutManager.findViewByPosition(position);
-        KLog.w(TAG, "getShareElements: position = " + position + ", view = " + view);
-        return new ShareElementInfo[]{new ShareElementInfo(view)};
     }
 
     private static class MyAdapter extends ARecyclerAdapter<Integer> {
@@ -108,9 +115,21 @@ public class YcViewPagerGalleryActivity extends AppCompatActivity implements ISh
 
         @Override
         protected void onBindViewData(RecyclerHolder holder, final int position, List<Integer> datas) {
-            ViewCompat.setTransitionName(holder.itemView, String.valueOf(position));
             Glide.with(holder.itemView)
                     .load(getItem(position))
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            Log.e(TAG, "onResourceReady: position = " + position);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            Log.e(TAG, "onResourceReady: position = " + position);
+                            return false;
+                        }
+                    })
                     .into((ImageView) holder.getView(R.id.iv_image));
         }
 

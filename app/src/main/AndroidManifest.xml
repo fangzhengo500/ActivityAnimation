@@ -29,12 +29,12 @@
         <activity
             android:name=".TransitionActivity"
             android:theme="@style/AppTheme.TransparentWindow" />
-        <activity android:name=".GridGalleryActivity" />
-        <activity android:name=".ViewPagerGalleryActivity" />
-        <activity android:name=".YcGridGalleryActivity" />
-        <activity android:name=".YcViewPagerGalleryActivity" />
-        <activity android:name=".CarouselActivity" />
-        <activity android:name=".CarouselDetailActivity" />
+        <activity android:name=".gallery.GridGalleryActivity" />
+        <activity android:name=".gallery.ViewPagerGalleryActivity" />
+        <activity android:name=".yc.YcGridGalleryActivity" />
+        <activity android:name=".yc.YcViewPagerGalleryActivity" />
+        <activity android:name=".carousel.CarouselActivity" />
+        <activity android:name=".carousel.CarouselDetailActivity" />
     </application>
 
 </manifest>

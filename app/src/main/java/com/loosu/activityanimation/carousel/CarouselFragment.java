@@ -1,5 +1,6 @@
-package com.loosu.activityanimation;
+package com.loosu.activityanimation.carousel;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,16 +9,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.SharedElementCallback;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.leochuan.CarouselLayoutManager;
 import com.leochuan.CenterSnapHelper;
 import com.leochuan.ScrollHelper;
+import com.loosu.activityanimation.R;
 import com.loosu.adapter.recyclerview.ARecyclerAdapter;
 import com.loosu.adapter.recyclerview.IRecyclerItemClickListener;
 import com.loosu.adapter.recyclerview.RecyclerHolder;
@@ -27,33 +31,46 @@ import com.loosu.utils.KLog;
 import java.util.List;
 import java.util.Map;
 
-public class CarouselActivity extends AppCompatActivity {
-    private static final String TAG = "CarouselActivity";
+public class CarouselFragment extends Fragment {
+    private static final String TAG = "CarouselFragment";
+
+    private MyAdapter mAdapter;
+    private CarouselLayoutManager mLayoutManager;
 
     private RecyclerView mViewList;
-    private CarouselLayoutManager mLayoutManager;
-    private MyAdapter mAdapter;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_carousel);
         init(savedInstanceState);
-        findView(savedInstanceState);
-        initView(savedInstanceState);
-        intiListener(savedInstanceState);
     }
 
-    private void init(Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_carousel, container, false);
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        findView(view, savedInstanceState);
+        initView(view, savedInstanceState);
+        initListener(view, savedInstanceState);
+    }
+
+
+    protected void init(@Nullable Bundle savedInstanceState) {
         mAdapter = new MyAdapter(ColorData.getColors());
     }
 
-    private void findView(Bundle savedInstanceState) {
-        mViewList = findViewById(R.id.view_list);
+    private void findView(@NonNull View view, Bundle savedInstanceState) {
+        mViewList = view.findViewById(R.id.view_list);
     }
 
-    private void initView(Bundle savedInstanceState) {
-        mLayoutManager = new CarouselLayoutManager.Builder(getApplicationContext(), 600)
+    private void initView(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        mLayoutManager = new CarouselLayoutManager.Builder(getContext(), 600)
                 .build();
         mViewList.setLayoutManager(mLayoutManager);
         mViewList.setAdapter(mAdapter);
@@ -62,13 +79,13 @@ public class CarouselActivity extends AppCompatActivity {
         snapHelper.attachToRecyclerView(mViewList);
     }
 
-    private void intiListener(Bundle savedInstanceState) {
+    private void initListener(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mViewList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                KLog.w(TAG, "onScrollStateChanged: recyclerView = " + recyclerView +", newState = " + newState );
+                KLog.w(TAG, "onScrollStateChanged: recyclerView = " + recyclerView + ", newState = " + newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    ActivityCompat.startPostponedEnterTransition(CarouselActivity.this);
+                    ActivityCompat.startPostponedEnterTransition(getActivity());
                 }
             }
 
@@ -91,26 +108,14 @@ public class CarouselActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onActivityReenter(int resultCode, Intent data) {
-        int index = data.getIntExtra("key_index", 0);
-
-        View view = mLayoutManager.findViewByPosition(index);
-        if (view == null){
-            ActivityCompat.postponeEnterTransition(this);
-            mViewList.smoothScrollToPosition(index);
-        }
-        KLog.w(TAG, "onActivityReenter: index = " + index);
-    }
-
     private IRecyclerItemClickListener itemClickListener = new IRecyclerItemClickListener() {
         @Override
         public void onItemClick(RecyclerView parent, int position, RecyclerView.ViewHolder holder, View view) {
             int centerPosition = mLayoutManager.getCurrentPosition();
             if (centerPosition == position) {
-                Context context = CarouselActivity.this;
+                Context context = getContext();
 
-                ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(CarouselActivity.this, view, String.valueOf(position));
+                ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, String.valueOf(position));
                 Intent intent = CarouselDetailActivity.getStartIntent(context, mAdapter.getDatas(), position);
                 ActivityCompat.startActivity(context, intent, compat.toBundle());
             } else {
@@ -118,6 +123,17 @@ public class CarouselActivity extends AppCompatActivity {
             }
         }
     };
+
+    public void onActivityReenter(Activity activity, int resultCode, Intent data) {
+        int index = data.getIntExtra("key_index", 0);
+
+        View view = mLayoutManager.findViewByPosition(index);
+        if (view == null) {
+            ActivityCompat.postponeEnterTransition(getActivity());
+            mViewList.smoothScrollToPosition(index);
+        }
+        KLog.w(TAG, "onActivityReenter: index = " + index);
+    }
 
     private static class MyAdapter extends ARecyclerAdapter<Integer> {
 

@@ -1,4 +1,4 @@
-package com.loosu.activityanimation;
+package com.loosu.activityanimation.carousel;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,6 +15,7 @@ import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.loosu.activityanimation.R;
 import com.loosu.adapter.recyclerview.ARecyclerAdapter;
 import com.loosu.adapter.recyclerview.RecyclerHolder;
 import com.loosu.utils.KLog;

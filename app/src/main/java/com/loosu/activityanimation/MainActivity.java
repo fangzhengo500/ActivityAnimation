@@ -11,6 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.loosu.activityanimation.carousel.CarouselActivity;
+import com.loosu.activityanimation.gallery.GridGalleryActivity;
+import com.loosu.activityanimation.yc.YcGridGalleryActivity;
+
 public class MainActivity extends AppCompatActivity {
     /**
      * ActivityOptionsCompat.makeBasic();

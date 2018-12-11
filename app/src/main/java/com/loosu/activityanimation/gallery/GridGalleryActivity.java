@@ -1,4 +1,4 @@
-package com.loosu.activityanimation;
+package com.loosu.activityanimation.gallery;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,19 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.SharedElementCallback;
-import android.support.v4.util.LogWriter;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.hw.ycshareelement.YcShareElement;
-import com.hw.ycshareelement.transition.IShareElementSelector;
-import com.hw.ycshareelement.transition.IShareElements;
-import com.hw.ycshareelement.transition.ShareElementInfo;
+import com.loosu.activityanimation.R;
 import com.loosu.adapter.recyclerview.ARecyclerAdapter;
 import com.loosu.adapter.recyclerview.IRecyclerItemClickListener;
 import com.loosu.adapter.recyclerview.RecyclerHolder;
@@ -29,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class YcGridGalleryActivity extends AppCompatActivity implements IRecyclerItemClickListener, IShareElements {
+public class GridGalleryActivity extends AppCompatActivity implements IRecyclerItemClickListener {
     private static final String TAG = "GridGalleryActivity";
 
     private RecyclerView mViewList;
@@ -39,7 +33,6 @@ public class YcGridGalleryActivity extends AppCompatActivity implements IRecycle
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        YcShareElement.setEnterTransitions(this, this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid_gallery);
         init(savedInstanceState);
@@ -51,8 +44,6 @@ public class YcGridGalleryActivity extends AppCompatActivity implements IRecycle
 
     @NonNull
     private void init(Bundle savedInstanceState) {
-        YcShareElement.enableContentTransition(getApplication());
-
         List<Integer> imgs = new ArrayList<>();
         imgs.add(R.mipmap.pic4);
         imgs.add(R.mipmap.pic5);
@@ -115,51 +106,57 @@ public class YcGridGalleryActivity extends AppCompatActivity implements IRecycle
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 KLog.w("onScrollStateChanged: newState = " + newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                    ActivityCompat.startPostponedEnterTransition(GridGalleryActivity.this);
             }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 KLog.w("onScrolled: dy = " + dy);
+                ActivityCompat.startPostponedEnterTransition(GridGalleryActivity.this);
+            }
+        });
+        setExitSharedElementCallback(new SharedElementCallback() {
+            @Override
+            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                super.onMapSharedElements(names, sharedElements);
+                names.clear();
+                sharedElements.clear();
+                RecyclerView.ViewHolder holder = mViewList.findViewHolderForAdapterPosition(mIndex);
+                if (holder != null) {
+                    sharedElements.put(String.valueOf(mIndex), holder.itemView);
+                }
+                KLog.w("onMapSharedElements: " + names + ", views: " + sharedElements);
             }
         });
     }
 
     @Override
-    public void onItemClick(RecyclerView parent, int position, RecyclerView.ViewHolder holder, final View view) {
-        Intent intent = YcViewPagerGalleryActivity.getStartIntent(getBaseContext(), mAdapter.getDatas(), position);
-        Bundle bundle = YcShareElement.buildOptionsBundle(this, new IShareElements() {
-            @Override
-            public ShareElementInfo[] getShareElements() {
-                ShareElementInfo elementInfo = new ShareElementInfo(view);
-                return new ShareElementInfo[]{elementInfo,};
-            }
-        });
-        ActivityCompat.startActivityForResult(this, intent, 666, bundle);
+    public void onItemClick(RecyclerView parent, int position, RecyclerView.ViewHolder holder, View view) {
+        Intent intent = ViewPagerGalleryActivity.getStartIntent(getBaseContext(), mAdapter.getDatas(), position);
+        ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, String.valueOf(position));
+        ActivityCompat.startActivityForResult(this, intent, 666, compat.toBundle());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        KLog.w("onActivityResult: requestCode = " + requestCode + ", resultCode = " + resultCode);
     }
 
     @Override
     public void onActivityReenter(int resultCode, Intent data) {
-        KLog.e(TAG, "onActivityReenter: resultCode = " + data);
         super.onActivityReenter(resultCode, data);
-        YcShareElement.onActivityReenter(this, resultCode, data, new IShareElementSelector() {
-            @Override
-            public void selectShareElements(List<ShareElementInfo> list) {
-                KLog.e(TAG, "selectShareElements: list = " + list);
+        KLog.w("onActivityReenter: resultCode = " + resultCode );
+        if (data != null) {
+            mIndex = data.getIntExtra("key_index", -1);
+            View positionView = mLayoutManager.findViewByPosition(mIndex);
+            if (positionView == null) {
+                ActivityCompat.postponeEnterTransition(this);
+                mViewList.scrollToPosition(mIndex);
             }
-        });
-    }
-
-    @Override
-    public ShareElementInfo[] getShareElements() {
-        KLog.w(TAG, "getShareElements: position = " );
-        return new ShareElementInfo[0];
-    }
-
-    @Override
-    public void finishAfterTransition() {
-        YcShareElement.finishAfterTransition(this, this);
-        super.finishAfterTransition();
+        }
     }
 
     private static class MyAdapter extends ARecyclerAdapter<Integer> {
@@ -170,7 +167,6 @@ public class YcGridGalleryActivity extends AppCompatActivity implements IRecycle
 
         @Override
         protected void onBindViewData(RecyclerHolder holder, int position, List<Integer> datas) {
-            ViewCompat.setTransitionName(holder.itemView, String.valueOf(position));
             ImageView imageView = holder.getView(R.id.iv_image);
             imageView.setImageResource(datas.get(position));
         }
