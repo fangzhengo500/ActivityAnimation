@@ -12,4 +12,5 @@
     <string name="tv_title_transition">tv_title_transition</string>
     <string name="card_transition">card_transition</string>
     <string name="gallery">Gallery</string>
+    <string name="yc_gallery">YcGallery</string>
 </resources>

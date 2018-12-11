@@ -73,4 +73,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(mContext, GridGalleryActivity.class);
         startActivity(intent);
     }
+
+    public void onClickYcGallery(View view) {
+        Intent intent = new Intent(mContext, YcGridGalleryActivity.class);
+        startActivity(intent);
+    }
 }

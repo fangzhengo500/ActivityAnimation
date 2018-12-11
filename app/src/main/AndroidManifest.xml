@@ -31,6 +31,8 @@
             android:theme="@style/AppTheme.TransparentWindow" />
         <activity android:name=".GridGalleryActivity" />
         <activity android:name=".ViewPagerGalleryActivity" />
+        <activity android:name=".YcGridGalleryActivity" />
+        <activity android:name=".YcViewPagerGalleryActivity" />
     </application>
 
 </manifest>
