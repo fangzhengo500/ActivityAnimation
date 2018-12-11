@@ -33,6 +33,8 @@
         <activity android:name=".ViewPagerGalleryActivity" />
         <activity android:name=".YcGridGalleryActivity" />
         <activity android:name=".YcViewPagerGalleryActivity" />
+        <activity android:name=".CarouselActivity" />
+        <activity android:name=".CarouselDetailActivity" />
     </application>
 
 </manifest>

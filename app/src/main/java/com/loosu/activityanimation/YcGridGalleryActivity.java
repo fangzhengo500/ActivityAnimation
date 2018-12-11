@@ -115,15 +115,12 @@ public class YcGridGalleryActivity extends AppCompatActivity implements IRecycle
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 KLog.w("onScrollStateChanged: newState = " + newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE)
-                    ActivityCompat.startPostponedEnterTransition(YcGridGalleryActivity.this);
             }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 KLog.w("onScrolled: dy = " + dy);
-                ActivityCompat.startPostponedEnterTransition(YcGridGalleryActivity.this);
             }
         });
     }
@@ -143,17 +140,19 @@ public class YcGridGalleryActivity extends AppCompatActivity implements IRecycle
 
     @Override
     public void onActivityReenter(int resultCode, Intent data) {
+        KLog.e(TAG, "onActivityReenter: resultCode = " + data);
         super.onActivityReenter(resultCode, data);
         YcShareElement.onActivityReenter(this, resultCode, data, new IShareElementSelector() {
             @Override
             public void selectShareElements(List<ShareElementInfo> list) {
-                KLog.w(TAG, "selectShareElements: " + list);
+                KLog.e(TAG, "selectShareElements: list = " + list);
             }
         });
     }
 
     @Override
     public ShareElementInfo[] getShareElements() {
+        KLog.w(TAG, "getShareElements: position = " );
         return new ShareElementInfo[0];
     }
 

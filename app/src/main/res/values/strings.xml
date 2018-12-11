@@ -13,4 +13,5 @@
     <string name="card_transition">card_transition</string>
     <string name="gallery">Gallery</string>
     <string name="yc_gallery">YcGallery</string>
+    <string name="carousel">Carousel</string>
 </resources>

@@ -78,4 +78,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(mContext, YcGridGalleryActivity.class);
         startActivity(intent);
     }
+
+    public void onClickCarousel(View view) {
+        Intent intent = new Intent(mContext, CarouselActivity.class);
+        startActivity(intent);
+    }
 }

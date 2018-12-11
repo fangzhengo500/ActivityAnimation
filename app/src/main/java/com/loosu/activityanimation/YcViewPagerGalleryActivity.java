@@ -56,7 +56,7 @@ public class YcViewPagerGalleryActivity extends AppCompatActivity implements ISh
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        YcShareElement.setEnterTransitions(this, this,false);
+        YcShareElement.setEnterTransitions(this, this, false);
         setContentView(R.layout.activity_viewpager_gallery);
         findView(savedInstanceState);
         initView(savedInstanceState);
@@ -81,6 +81,11 @@ public class YcViewPagerGalleryActivity extends AppCompatActivity implements ISh
 
     }
 
+    @Override
+    public void finishAfterTransition() {
+        YcShareElement.finishAfterTransition(this, this);
+        super.finishAfterTransition();
+    }
 
     @Override
     public void onBackPressed() {
@@ -91,6 +96,7 @@ public class YcViewPagerGalleryActivity extends AppCompatActivity implements ISh
     public ShareElementInfo[] getShareElements() {
         int position = mLayoutManager.findFirstVisibleItemPosition();
         View view = mLayoutManager.findViewByPosition(position);
+        KLog.w(TAG, "getShareElements: position = " + position + ", view = " + view);
         return new ShareElementInfo[]{new ShareElementInfo(view)};
     }
 
