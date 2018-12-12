@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.loosu.activityanimation.R;
@@ -20,9 +21,9 @@ public class CarouselActivity extends AppCompatActivity {
     private List<CarouselFragment> mFragments;
 
     private TabLayout mTabLayout;
-    //private ViewPager mViewPager;
+    private ViewPager mViewPager;
 
-    //private MyPagerAdapter mAdapter;
+    private MyPagerAdapter mAdapter;
 
 
     @Override
@@ -38,10 +39,10 @@ public class CarouselActivity extends AppCompatActivity {
     private void init(Bundle savedInstanceState) {
         mFragments = new ArrayList<>();
         mFragments.add(new CarouselFragment());
-        mFragments.add(new CarouselFragment());
-        mFragments.add(new CarouselFragment());
+//        mFragments.add(new CarouselFragment());
+//        mFragments.add(new CarouselFragment());
 
-        //mAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments);
+        mAdapter = new MyPagerAdapter(getSupportFragmentManager(), mFragments);
     }
 
     private void findView(Bundle savedInstanceState) {
@@ -50,10 +51,11 @@ public class CarouselActivity extends AppCompatActivity {
     }
 
     private void initView(Bundle savedInstanceState) {
-
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.layout_container, mFragments.get(0))
                 .commit();
+//        mViewPager.setAdapter(mAdapter);
+//        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     private void intiListener(Bundle savedInstanceState) {
@@ -62,6 +64,8 @@ public class CarouselActivity extends AppCompatActivity {
 
     @Override
     public void onActivityReenter(int resultCode, Intent data) {
+        mFragments.get(0).onActivityReenter(this,resultCode,data);
+        //mAdapter.getItem(mViewPager.getCurrentItem());
     }
 
 

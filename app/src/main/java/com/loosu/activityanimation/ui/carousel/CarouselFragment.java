@@ -30,13 +30,15 @@ import com.loosu.activityanimation.utils.KLog;
 import java.util.List;
 import java.util.Map;
 
-public class CarouselFragment extends Fragment {
+public class CarouselFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "CarouselFragment";
 
     private MyAdapter mAdapter;
     private CarouselLayoutManager mLayoutManager;
 
     private RecyclerView mViewList;
+    private View mBtnPre;
+    private View mBtnNext;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +68,8 @@ public class CarouselFragment extends Fragment {
 
     private void findView(@NonNull View view, Bundle savedInstanceState) {
         mViewList = view.findViewById(R.id.view_list);
+        mBtnPre = view.findViewById(R.id.btn_per);
+        mBtnNext = view.findViewById(R.id.btn_next);
     }
 
     private void initView(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -79,6 +83,9 @@ public class CarouselFragment extends Fragment {
     }
 
     private void initListener(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        mBtnPre.setOnClickListener(this);
+        mBtnNext.setOnClickListener(this);
+
         mViewList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -94,17 +101,8 @@ public class CarouselFragment extends Fragment {
             }
         });
         mAdapter.setItemClickListener(itemClickListener);
-        setExitSharedElementCallback(new SharedElementCallback() {
-            @Override
-            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-                KLog.w(TAG, "onMapSharedElements: names = " + names + ", sharedElements = " + sharedElements);
-                int position = mLayoutManager.getCurrentPosition();
-                View view = mLayoutManager.findViewByPosition(position);
-                names.clear();
-                sharedElements.clear();
-                sharedElements.put(String.valueOf(position), view);
-            }
-        });
+
+        getActivity().setExitSharedElementCallback(mSharedElementCallback);
     }
 
     private IRecyclerItemClickListener itemClickListener = new IRecyclerItemClickListener() {
@@ -127,11 +125,20 @@ public class CarouselFragment extends Fragment {
         int index = data.getIntExtra("key_index", 0);
 
         View view = mLayoutManager.findViewByPosition(index);
-        if (view == null) {
-            ActivityCompat.postponeEnterTransition(getActivity());
-            mViewList.smoothScrollToPosition(index);
+        mLayoutManager.scrollToPosition(index);
+        KLog.w(TAG, "onActivityReenter: index = " + index + ", view = " + view);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_per:
+                mViewList.scrollToPosition(mLayoutManager.getCurrentPosition() - 1);
+                break;
+            case R.id.btn_next:
+                mViewList.scrollToPosition(mLayoutManager.getCurrentPosition() + 1);
+                break;
         }
-        KLog.w(TAG, "onActivityReenter: index = " + index);
     }
 
     private static class MyAdapter extends ARecyclerAdapter<Integer> {
@@ -160,4 +167,16 @@ public class CarouselFragment extends Fragment {
             return mDatas.get(position);
         }
     }
+
+    private SharedElementCallback mSharedElementCallback = new SharedElementCallback() {
+        @Override
+        public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+            KLog.w(TAG, "onMapSharedElements: names = " + names + ", sharedElements = " + sharedElements);
+            int position = mLayoutManager.getCurrentPosition();
+            View view = mLayoutManager.findViewByPosition(position);
+            names.clear();
+            sharedElements.clear();
+            sharedElements.put(String.valueOf(position), view);
+        }
+    };
 }
