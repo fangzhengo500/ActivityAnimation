@@ -33,7 +33,8 @@
         <activity android:name=".ui.gallery.ViewPagerGalleryActivity" />
         <activity android:name=".ui.yc.activity.YcGridGalleryActivity" />
         <activity android:name=".ui.yc.activity.YcViewPagerGalleryActivity" />
-        <activity android:name=".ui.carousel.CarouselActivity" />
+        <activity android:name=".ui.carousel.CarouselActivity"
+            android:configChanges="orientation|screenSize"/>
         <activity android:name=".ui.carousel.CarouselDetailActivity" />
     </application>
 

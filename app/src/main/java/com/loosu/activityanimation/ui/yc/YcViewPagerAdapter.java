@@ -1,6 +1,7 @@
 package com.loosu.activityanimation.ui.yc;
 
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +18,7 @@ public class YcViewPagerAdapter extends ARecyclerAdapter<Integer> {
 
     @Override
     protected void onBindViewData(RecyclerHolder holder, int position, List<Integer> datas) {
+        ViewCompat.setTransitionName(holder.itemView, String.valueOf(position));
         Glide.with(holder.itemView)
                 .load(getItem(position))
                 .into((ImageView) holder.getView(R.id.iv_image));

@@ -11,18 +11,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hw.ycshareelement.YcShareElement;
+import com.hw.ycshareelement.transition.IShareElements;
+import com.hw.ycshareelement.transition.ShareElementInfo;
 import com.loosu.activityanimation.R;
 import com.loosu.activityanimation.adapter.base.recyclerview.IRecyclerItemClickListener;
 import com.loosu.activityanimation.ui.yc.YcGridAdapter;
 import com.loosu.activityanimation.ui.yc.activity.YcViewPagerGalleryActivity;
 import com.loosu.activityanimation.utils.DataHelper;
 
-public class YcGridGalleryFragment extends Fragment implements IRecyclerItemClickListener {
+public class YcGridGalleryFragment extends Fragment implements IRecyclerItemClickListener, IShareElements {
     private static final int REQ_CODE_SHOW_DETAIL = 666;
 
     private RecyclerView mViewList;
     private GridLayoutManager mLayoutManager;
     private YcGridAdapter mAdapter;
+
+    private Integer mPosition;
 
     @Nullable
     @Override
@@ -45,7 +50,14 @@ public class YcGridGalleryFragment extends Fragment implements IRecyclerItemClic
 
     @Override
     public void onItemClick(RecyclerView parent, int position, RecyclerView.ViewHolder holder, View view) {
+        mPosition = position;
         Intent intent = YcViewPagerGalleryActivity.getStartIntent(getActivity(), mAdapter.getDatas(), position);
-        startActivityForResult(intent, REQ_CODE_SHOW_DETAIL);
+        Bundle bundle = YcShareElement.buildOptionsBundle(getActivity(), this);
+        startActivityForResult(intent, REQ_CODE_SHOW_DETAIL, bundle);
+    }
+
+    @Override
+    public ShareElementInfo[] getShareElements() {
+        return new ShareElementInfo[]{new ShareElementInfo(mLayoutManager.findViewByPosition(mPosition))};
     }
 }

@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hw.ycshareelement.YcShareElement;
+import com.hw.ycshareelement.transition.ShareElementInfo;
 import com.loosu.activityanimation.R;
 import com.loosu.activityanimation.ui.yc.YcViewPagerAdapter;
 
@@ -55,5 +57,13 @@ public class YcViewPagerGalleryFragment extends Fragment {
         mViewList.setAdapter(adapter);
 
         mViewList.scrollToPosition(arguments.getInt(KEY_INDEX));
+
+        YcShareElement.postStartTransition(getActivity());
+    }
+
+    public ShareElementInfo[] getShareElements() {
+        int position = mLayoutManager.findFirstVisibleItemPosition();
+        View view = mLayoutManager.findViewByPosition(position);
+        return new ShareElementInfo[]{new ShareElementInfo(view)};
     }
 }

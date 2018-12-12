@@ -50,14 +50,6 @@ public class CarouselActivity extends AppCompatActivity {
     }
 
     private void initView(Bundle savedInstanceState) {
-        //mViewPager.setAdapter(mAdapter);
-        //mTabLayout.setupWithViewPager(mViewPager);
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        for (int i = 0; i < mFragments.size(); i++) {
-//            CarouselFragment fragment = mFragments.get(i);
-//            transaction.add(fragment, String.valueOf(i));
-//        }
-//        transaction.commit();
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.layout_container, mFragments.get(0))
@@ -70,8 +62,6 @@ public class CarouselActivity extends AppCompatActivity {
 
     @Override
     public void onActivityReenter(int resultCode, Intent data) {
-        //CarouselFragment fragment = mAdapter.getItem(mViewPager.getCurrentItem());
-        //fragment.onActivityReenter(this, resultCode, data);
     }
 
 
