@@ -1,4 +1,4 @@
-package com.loosu.adapter.recyclerview;
+package com.loosu.activityanimation.adapter.base.recyclerview;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;

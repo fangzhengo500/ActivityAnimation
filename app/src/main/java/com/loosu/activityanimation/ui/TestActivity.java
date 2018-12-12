@@ -1,4 +1,4 @@
-package com.loosu.activityanimation;
+package com.loosu.activityanimation.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,9 +7,10 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Explode;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.loosu.activityanimation.R;
 
 public class TestActivity extends AppCompatActivity {
     private static final String KEY_RES_ID = "key_res_id";

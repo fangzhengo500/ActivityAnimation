@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,18 +23,18 @@
         </activity>
 
         <activity
-            android:name=".TestActivity"
+            android:name=".ui.TestActivity"
             android:theme="@style/AppTheme.TransparentWindow" />
 
         <activity
-            android:name=".TransitionActivity"
+            android:name=".ui.TransitionActivity"
             android:theme="@style/AppTheme.TransparentWindow" />
-        <activity android:name=".gallery.GridGalleryActivity" />
-        <activity android:name=".gallery.ViewPagerGalleryActivity" />
-        <activity android:name=".yc.YcGridGalleryActivity" />
-        <activity android:name=".yc.YcViewPagerGalleryActivity" />
-        <activity android:name=".carousel.CarouselActivity" />
-        <activity android:name=".carousel.CarouselDetailActivity" />
+        <activity android:name=".ui.gallery.GridGalleryActivity" />
+        <activity android:name=".ui.gallery.ViewPagerGalleryActivity" />
+        <activity android:name=".ui.yc.activity.YcGridGalleryActivity" />
+        <activity android:name=".ui.yc.activity.YcViewPagerGalleryActivity" />
+        <activity android:name=".ui.carousel.CarouselActivity" />
+        <activity android:name=".ui.carousel.CarouselDetailActivity" />
     </application>
 
 </manifest>

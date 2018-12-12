@@ -1,29 +1,28 @@
-package com.loosu.activityanimation.carousel;
+package com.loosu.activityanimation.ui.carousel;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.loosu.activityanimation.R;
-import com.loosu.utils.KLog;
+import com.loosu.activityanimation.utils.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CarouselActivity extends AppCompatActivity {
     private static final String TAG = "CarouselActivity";
-    private TabLayout mTabLayout;
-    private ViewPager mViewPager;
 
-    private MyPagerAdapter mAdapter;
+    private List<CarouselFragment> mFragments;
+
+    private TabLayout mTabLayout;
+    //private ViewPager mViewPager;
+
+    //private MyPagerAdapter mAdapter;
 
 
     @Override
@@ -37,22 +36,32 @@ public class CarouselActivity extends AppCompatActivity {
     }
 
     private void init(Bundle savedInstanceState) {
-        List<CarouselFragment> fragments = new ArrayList<>();
-        fragments.add(new CarouselFragment());
-        fragments.add(new CarouselFragment());
-        fragments.add(new CarouselFragment());
+        mFragments = new ArrayList<>();
+        mFragments.add(new CarouselFragment());
+        mFragments.add(new CarouselFragment());
+        mFragments.add(new CarouselFragment());
 
-        mAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments);
+        //mAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments);
     }
 
     private void findView(Bundle savedInstanceState) {
         mTabLayout = findViewById(R.id.layout_tab);
-        mViewPager = findViewById(R.id.view_pager);
+        //mViewPager = findViewById(R.id.view_pager);
     }
 
     private void initView(Bundle savedInstanceState) {
-        mViewPager.setAdapter(mAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
+        //mViewPager.setAdapter(mAdapter);
+        //mTabLayout.setupWithViewPager(mViewPager);
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        for (int i = 0; i < mFragments.size(); i++) {
+//            CarouselFragment fragment = mFragments.get(i);
+//            transaction.add(fragment, String.valueOf(i));
+//        }
+//        transaction.commit();
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.layout_container, mFragments.get(0))
+                .commit();
     }
 
     private void intiListener(Bundle savedInstanceState) {
@@ -61,8 +70,8 @@ public class CarouselActivity extends AppCompatActivity {
 
     @Override
     public void onActivityReenter(int resultCode, Intent data) {
-        CarouselFragment fragment = mAdapter.getItem(mViewPager.getCurrentItem());
-        fragment.onActivityReenter(this, resultCode, data);
+        //CarouselFragment fragment = mAdapter.getItem(mViewPager.getCurrentItem());
+        //fragment.onActivityReenter(this, resultCode, data);
     }
 
 

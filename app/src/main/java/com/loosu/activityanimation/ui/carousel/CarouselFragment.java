@@ -1,9 +1,8 @@
-package com.loosu.activityanimation.carousel;
+package com.loosu.activityanimation.ui.carousel;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,11 +21,11 @@ import com.leochuan.CarouselLayoutManager;
 import com.leochuan.CenterSnapHelper;
 import com.leochuan.ScrollHelper;
 import com.loosu.activityanimation.R;
-import com.loosu.adapter.recyclerview.ARecyclerAdapter;
-import com.loosu.adapter.recyclerview.IRecyclerItemClickListener;
-import com.loosu.adapter.recyclerview.RecyclerHolder;
-import com.loosu.utils.ColorData;
-import com.loosu.utils.KLog;
+import com.loosu.activityanimation.adapter.base.recyclerview.ARecyclerAdapter;
+import com.loosu.activityanimation.adapter.base.recyclerview.IRecyclerItemClickListener;
+import com.loosu.activityanimation.adapter.base.recyclerview.RecyclerHolder;
+import com.loosu.activityanimation.utils.DataHelper;
+import com.loosu.activityanimation.utils.KLog;
 
 import java.util.List;
 import java.util.Map;
@@ -62,7 +61,7 @@ public class CarouselFragment extends Fragment {
 
 
     protected void init(@Nullable Bundle savedInstanceState) {
-        mAdapter = new MyAdapter(ColorData.getColors());
+        mAdapter = new MyAdapter(DataHelper.getColors());
     }
 
     private void findView(@NonNull View view, Bundle savedInstanceState) {

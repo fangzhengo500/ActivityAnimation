@@ -1,10 +1,12 @@
-package com.loosu.activityanimation;
+package com.loosu.activityanimation.ui;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Explode;
+
+import com.loosu.activityanimation.R;
 
 public class TransitionActivity extends AppCompatActivity {
     @Override

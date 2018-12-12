@@ -1,4 +1,4 @@
-package com.loosu.activityanimation;
+package com.loosu.activityanimation.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.loosu.activityanimation.carousel.CarouselActivity;
-import com.loosu.activityanimation.gallery.GridGalleryActivity;
-import com.loosu.activityanimation.yc.YcGridGalleryActivity;
+import com.loosu.activityanimation.R;
+import com.loosu.activityanimation.ui.carousel.CarouselActivity;
+import com.loosu.activityanimation.ui.gallery.GridGalleryActivity;
+import com.loosu.activityanimation.ui.yc.activity.YcGridGalleryActivity;
 
 public class MainActivity extends AppCompatActivity {
     /**

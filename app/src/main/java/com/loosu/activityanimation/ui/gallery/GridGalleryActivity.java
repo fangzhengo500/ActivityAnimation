@@ -1,4 +1,4 @@
-package com.loosu.activityanimation.gallery;
+package com.loosu.activityanimation.ui.gallery;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,10 +14,10 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.loosu.activityanimation.R;
-import com.loosu.adapter.recyclerview.ARecyclerAdapter;
-import com.loosu.adapter.recyclerview.IRecyclerItemClickListener;
-import com.loosu.adapter.recyclerview.RecyclerHolder;
-import com.loosu.utils.KLog;
+import com.loosu.activityanimation.adapter.base.recyclerview.ARecyclerAdapter;
+import com.loosu.activityanimation.adapter.base.recyclerview.IRecyclerItemClickListener;
+import com.loosu.activityanimation.adapter.base.recyclerview.RecyclerHolder;
+import com.loosu.activityanimation.utils.KLog;
 
 import java.util.ArrayList;
 import java.util.List;

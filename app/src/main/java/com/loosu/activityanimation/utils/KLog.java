@@ -1,4 +1,4 @@
-package com.loosu.utils;
+package com.loosu.activityanimation.utils;
 
 import android.text.TextUtils;
 import android.util.Log;
