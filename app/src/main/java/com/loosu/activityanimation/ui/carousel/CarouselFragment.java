@@ -85,21 +85,7 @@ public class CarouselFragment extends Fragment implements View.OnClickListener {
     private void initListener(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mBtnPre.setOnClickListener(this);
         mBtnNext.setOnClickListener(this);
-
-        mViewList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                KLog.w(TAG, "onScrollStateChanged: recyclerView = " + recyclerView + ", newState = " + newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    ActivityCompat.startPostponedEnterTransition(getActivity());
-                }
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                KLog.w(TAG, "onScrolled: dx = " + dx + ", dy = " + dy);
-            }
-        });
+        mViewList.addOnScrollListener(mScrollListener);
         mAdapter.setItemClickListener(itemClickListener);
 
         getActivity().setExitSharedElementCallback(mSharedElementCallback);
@@ -123,8 +109,10 @@ public class CarouselFragment extends Fragment implements View.OnClickListener {
 
     public void onActivityReenter(Activity activity, int resultCode, Intent data) {
         int index = data.getIntExtra("key_index", 0);
-
         View view = mLayoutManager.findViewByPosition(index);
+        if (view == null) {
+            ActivityCompat.postponeEnterTransition(getActivity());
+        }
         mLayoutManager.scrollToPosition(index);
         KLog.w(TAG, "onActivityReenter: index = " + index + ", view = " + view);
     }
@@ -140,6 +128,34 @@ public class CarouselFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
+
+    private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+            KLog.w(TAG, "onScrollStateChanged: recyclerView = " + recyclerView + ", newState = " + newState);
+            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+
+            }
+        }
+
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            KLog.w(TAG, "onScrolled: dx = " + dx + ", dy = " + dy);
+            ActivityCompat.startPostponedEnterTransition(getActivity());
+        }
+    };
+    private SharedElementCallback mSharedElementCallback = new SharedElementCallback() {
+        @Override
+        public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+            KLog.w(TAG, "onMapSharedElements: names = " + names + ", sharedElements = " + sharedElements);
+            int position = mLayoutManager.getCurrentPosition();
+            View view = mLayoutManager.findViewByPosition(position);
+            names.clear();
+            sharedElements.clear();
+            sharedElements.put(String.valueOf(position), view);
+        }
+    };
 
     private static class MyAdapter extends ARecyclerAdapter<Integer> {
 
@@ -168,15 +184,4 @@ public class CarouselFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private SharedElementCallback mSharedElementCallback = new SharedElementCallback() {
-        @Override
-        public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-            KLog.w(TAG, "onMapSharedElements: names = " + names + ", sharedElements = " + sharedElements);
-            int position = mLayoutManager.getCurrentPosition();
-            View view = mLayoutManager.findViewByPosition(position);
-            names.clear();
-            sharedElements.clear();
-            sharedElements.put(String.valueOf(position), view);
-        }
-    };
 }
