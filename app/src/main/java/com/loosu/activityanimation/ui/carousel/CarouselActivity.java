@@ -47,15 +47,15 @@ public class CarouselActivity extends AppCompatActivity {
 
     private void findView(Bundle savedInstanceState) {
         mTabLayout = findViewById(R.id.layout_tab);
-        //mViewPager = findViewById(R.id.view_pager);
+        mViewPager = findViewById(R.id.view_pager);
     }
 
     private void initView(Bundle savedInstanceState) {
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.layout_container, mFragments.get(0))
-                .commit();
-//        mViewPager.setAdapter(mAdapter);
-//        mTabLayout.setupWithViewPager(mViewPager);
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.layout_container, mFragments.get(0))
+//                .commit();
+        mViewPager.setAdapter(mAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     private void intiListener(Bundle savedInstanceState) {
@@ -64,8 +64,9 @@ public class CarouselActivity extends AppCompatActivity {
 
     @Override
     public void onActivityReenter(int resultCode, Intent data) {
-        mFragments.get(0).onActivityReenter(this,resultCode,data);
-        //mAdapter.getItem(mViewPager.getCurrentItem());
+        //mFragments.get(0).onActivityReenter(this,resultCode,data);
+        CarouselFragment fragment = mAdapter.getItem(mViewPager.getCurrentItem());
+        fragment.onActivityReenter(this, resultCode, data);
     }
 
 

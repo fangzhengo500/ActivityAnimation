@@ -17,6 +17,7 @@ import com.loosu.activityanimation.R;
 import com.loosu.activityanimation.adapter.base.recyclerview.ARecyclerAdapter;
 import com.loosu.activityanimation.adapter.base.recyclerview.IRecyclerItemClickListener;
 import com.loosu.activityanimation.adapter.base.recyclerview.RecyclerHolder;
+import com.loosu.activityanimation.utils.DataHelper;
 import com.loosu.activityanimation.utils.KLog;
 
 import java.util.ArrayList;
@@ -44,49 +45,7 @@ public class GridGalleryActivity extends AppCompatActivity implements IRecyclerI
 
     @NonNull
     private void init(Bundle savedInstanceState) {
-        List<Integer> imgs = new ArrayList<>();
-        imgs.add(R.mipmap.pic4);
-        imgs.add(R.mipmap.pic5);
-        imgs.add(R.mipmap.pic6);
-        imgs.add(R.mipmap.pic7);
-        imgs.add(R.mipmap.pic8);
-        imgs.add(R.mipmap.pic9);
-        imgs.add(R.mipmap.pic10);
-        imgs.add(R.mipmap.pic11);
-        imgs.add(R.mipmap.pic12);
-        imgs.add(R.mipmap.pic13);
-        imgs.add(R.mipmap.pic4);
-        imgs.add(R.mipmap.pic5);
-        imgs.add(R.mipmap.pic6);
-        imgs.add(R.mipmap.pic7);
-        imgs.add(R.mipmap.pic8);
-        imgs.add(R.mipmap.pic9);
-        imgs.add(R.mipmap.pic10);
-        imgs.add(R.mipmap.pic11);
-        imgs.add(R.mipmap.pic12);
-        imgs.add(R.mipmap.pic13);
-        imgs.add(R.mipmap.pic4);
-        imgs.add(R.mipmap.pic5);
-        imgs.add(R.mipmap.pic6);
-        imgs.add(R.mipmap.pic7);
-        imgs.add(R.mipmap.pic8);
-        imgs.add(R.mipmap.pic9);
-        imgs.add(R.mipmap.pic10);
-        imgs.add(R.mipmap.pic11);
-        imgs.add(R.mipmap.pic12);
-        imgs.add(R.mipmap.pic13);
-        imgs.add(R.mipmap.pic4);
-        imgs.add(R.mipmap.pic5);
-        imgs.add(R.mipmap.pic6);
-        imgs.add(R.mipmap.pic7);
-        imgs.add(R.mipmap.pic8);
-        imgs.add(R.mipmap.pic9);
-        imgs.add(R.mipmap.pic10);
-        imgs.add(R.mipmap.pic11);
-        imgs.add(R.mipmap.pic12);
-        imgs.add(R.mipmap.pic13);
-
-        mAdapter = new MyAdapter(imgs);
+        mAdapter = new MyAdapter(DataHelper.getPics());
     }
 
     private void findView(Bundle savedInstanceState) {
