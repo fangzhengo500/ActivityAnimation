@@ -34,13 +34,15 @@ public class CarouselActivity extends AppCompatActivity {
         findView(savedInstanceState);
         initView(savedInstanceState);
         intiListener(savedInstanceState);
+
+        mViewPager.setCurrentItem(1);
     }
 
     private void init(Bundle savedInstanceState) {
         mFragments = new ArrayList<>();
         mFragments.add(new CarouselFragment());
-//        mFragments.add(new CarouselFragment());
-//        mFragments.add(new CarouselFragment());
+        mFragments.add(new CarouselFragment());
+        mFragments.add(new CarouselFragment());
 
         mAdapter = new MyPagerAdapter(getSupportFragmentManager(), mFragments);
     }
@@ -59,6 +61,8 @@ public class CarouselActivity extends AppCompatActivity {
     }
 
     private void intiListener(Bundle savedInstanceState) {
+
+        mViewPager.addOnPageChangeListener(mPageChangeListener);
     }
 
 
@@ -69,6 +73,24 @@ public class CarouselActivity extends AppCompatActivity {
         fragment.onActivityReenter(this, resultCode, data);
     }
 
+    private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            KLog.w(TAG, "onPageSelected: " + position);
+            CarouselFragment fragment = mAdapter.getItem(position);
+            fragment.setShareElementCallback();
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int position) {
+
+        }
+    };
 
     private static class MyPagerAdapter extends FragmentPagerAdapter {
         private List<CarouselFragment> mFragments;

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.SharedElementCallback;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
@@ -39,6 +40,8 @@ public class CarouselFragment extends Fragment implements View.OnClickListener {
     private RecyclerView mViewList;
     private View mBtnPre;
     private View mBtnNext;
+
+    private boolean needSetupShareElementCallback = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,7 +91,21 @@ public class CarouselFragment extends Fragment implements View.OnClickListener {
         mViewList.addOnScrollListener(mScrollListener);
         mAdapter.setItemClickListener(itemClickListener);
 
-        getActivity().setExitSharedElementCallback(mSharedElementCallback);
+        if (needSetupShareElementCallback) {
+            setShareElementCallback();
+        }
+    }
+
+    public void setShareElementCallback() {
+        FragmentActivity activity = getActivity();
+        KLog.i(TAG, "setShareElementCallback activity = " + activity);
+
+        if (activity != null) {
+            activity.setExitSharedElementCallback(mSharedElementCallback);
+            needSetupShareElementCallback = false;
+        } else {
+            needSetupShareElementCallback = true;
+        }
     }
 
     private IRecyclerItemClickListener itemClickListener = new IRecyclerItemClickListener() {
@@ -183,5 +200,4 @@ public class CarouselFragment extends Fragment implements View.OnClickListener {
             return mDatas.get(position);
         }
     }
-
 }
